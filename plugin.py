@@ -21,11 +21,11 @@ logger = get_logger("funasr_asr_provider")
 class FunASRASRProviderPlugin(BasePlugin):
     """独立的 FunASR ASR provider 插件。"""
 
-    plugin_name = "funasr_asr_provider"
+    plugin_name = "funasr_asr_provider_anima"
     plugin_version = "1.0.0"
     plugin_description = "FunASR ASR provider"
     configs = [FunASRProviderConfig]
-    dependent_components = ["asr_adapter:service:asr_provider_registry"]
+    dependent_components = ["asr_adapter_anima:service:asr_provider_registry"]
 
     def __init__(self, config: FunASRProviderConfig | None = None) -> None:
         """初始化插件。"""
@@ -48,10 +48,10 @@ class FunASRASRProviderPlugin(BasePlugin):
 
         registry = cast(
             ASRProviderRegistryLike | None,
-            get_service("asr_adapter:service:asr_provider_registry"),
+            get_service("asr_adapter_anima:service:asr_provider_registry"),
         )
         if registry is None:
-            raise RuntimeError("无法获取 asr_adapter provider registry service")
+            raise RuntimeError("无法获取 asr_adapter_anima provider registry service")
 
         self.provider = FunASRProvider(config)
         registry.register_provider(
@@ -65,7 +65,7 @@ class FunASRASRProviderPlugin(BasePlugin):
 
         registry = cast(
             ASRProviderRegistryLike | None,
-            get_service("asr_adapter:service:asr_provider_registry"),
+            get_service("asr_adapter_anima:service:asr_provider_registry"),
         )
         if registry is not None:
             registry.unregister_provider(FunASRProvider.provider_name)

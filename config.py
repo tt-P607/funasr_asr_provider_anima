@@ -56,7 +56,7 @@ class FunASRProviderConfig(BaseConfig):
             tag="ai",
         )
         hub: str = Field(
-            default="hf",
+            default="ms",
             description="模型下载来源；SenseVoiceSmall 与 Fun-ASR-Nano 官方示例都可使用 hf 加载仓库中的 model.py",
             label="模型 Hub",
             input_type="select",

@@ -1,11 +1,12 @@
 {
-    "name": "funasr_asr_provider",
+    "name": "funasr_asr_provider_anima",
+    "display_name": "FunASR ASR 提供者 (言柒 Fork 版)",
     "version": "1.0.0",
     "description": "独立的 FunASR ASR provider，通过 asr_adapter registry 注册识别后端",
-    "author": "MoFox Team",
+    "author": "言柒 & 拾风",
     "dependencies": {
-        "plugins": ["asr_adapter"],
-        "components": ["asr_adapter:service:asr_provider_registry"]
+        "plugins": ["asr_adapter_anima"],
+        "components": ["asr_adapter_anima:service:asr_provider_registry"]
     },
     "include": [],
     "entry_point": "plugin.py",
