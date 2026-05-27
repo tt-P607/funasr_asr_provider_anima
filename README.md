@@ -1,8 +1,26 @@
-# funasr_asr_provider
+# funasr_asr_provider_anima (言柒 Fork 版)
+
+> [!IMPORTANT]
+> **关键依赖声明**：本插件是言柒针对 `tt-P607/anima_chatter` 及其配套的 `tt-P607/asr_adapter_anima` 定制的专属 FunASR 后端插件。如果您要使用言柒版本的实时语音通话全套方案，**必须**使用本插件作为 ASR Provider 后端，以保证正常与 `asr_adapter_anima` 进行协作。
+
+## 部署与安装
+
+要完整搭建言柒版 `anima_chatter` 双向实时语音通话环境，请在 `plugins/` 目录下克隆全套配套插件：
+
+```bash
+# 1. 克隆语音/VTS 主聊天插件 (Anima Chatter)
+git clone https://github.com/tt-P607/anima_chatter.git
+
+# 2. 克隆配套实时语音识别适配器 (ASR Adapter Anima)
+git clone https://github.com/tt-P607/asr_adapter_anima.git
+
+# 3. 克隆本 FunASR 识别后端 (FunASR Provider Anima)
+git clone https://github.com/tt-P607/funasr_asr_provider_anima.git
+```
 
 ## 概述
 
-`funasr_asr_provider` 是独立的 FunASR 识别后端插件。
+`funasr_asr_provider_anima` 是独立的 FunASR 识别后端插件。
 
 它不直接承担平台适配职责，而是在加载时向 `asr_adapter_anima` 提供的 provider registry 注册 `funasr` 识别后端。这样 `asr_adapter_anima` 可以继续保持为通用本地语音 Adapter，而具体模型和推理配置都收敛在本插件内。
 
