@@ -149,11 +149,13 @@ class MicrophoneAudioSource:
             return array.mean(axis=1, dtype=np.float32)
         return array.reshape(-1)
 
-    def _coerce_device(self, device: str | None) -> str | int | None:
+    @staticmethod
+    def _coerce_device(device: str | None) -> str | int | None:
         """将配置中的设备值转换为 sounddevice 可接受的类型。"""
 
-        if device is None:
+        value = str(device or "").strip()
+        if not value:
             return None
-        if device.isdigit():
-            return int(device)
-        return device
+        if value.isdigit() or (value.startswith("-") and value[1:].isdigit()):
+            return int(value)
+        return value

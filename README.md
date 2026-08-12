@@ -89,6 +89,25 @@ Python 依赖较重，主要包括：
 - 想在不改 `asr_adapter_anima` 的情况下替换或并存多个 ASR 后端
 - 想把 FunASR 的重依赖和模型配置独立管理
 
+## 故障排查
+
+- 模型文件校验失败：确认 `asr.model` 指向可访问的 Hub ID 或完整本地目录。
+- remote code 导入失败：确认 `trust_remote_code`、`remote_code` 与所选 Hub/模型仓库一致；本地路径会自动加入导入搜索路径且避免重复注入。
+- CUDA 不可用或显存不足：将 `asr.device` 改为 `cpu`，并根据模型调整精度、窗口和生成长度。
+- 输入设备无法打开：设备留空使用系统默认设备，也可填写设备名称、正索引或负索引。
+- 插件加载失败后 Registry 存在残留：当前实现只在注册成功后保存 Provider 引用，失败会完整回滚。
+
+## 验证
+
+自动测试位于 `plugins/funasr_asr_provider_anima/test/`：
+
+```bash
+uv run pytest plugins/funasr_asr_provider_anima/test -q --no-cov
+uv run ruff check plugins/funasr_asr_provider_anima
+```
+
+自动测试不加载 FunASR 模型。实机验证需额外确认模型下载/本地加载、选定设备推理、麦克风采集、端点检测和最终文本输出。
+
 ## 相关插件
 
 - `plugins/asr_adapter_anima`

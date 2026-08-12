@@ -6,8 +6,7 @@ from typing import cast
 
 from src.app.plugin_system.api.log_api import get_logger
 from src.app.plugin_system.api.service_api import get_service
-from src.core.components.base.plugin import BasePlugin
-from src.core.components.loader import register_plugin
+from src.app.plugin_system.base import BasePlugin, register_plugin
 
 from .config import FunASRProviderConfig
 from .protocol import ASRProviderRegistryLike
@@ -19,11 +18,9 @@ logger = get_logger("funasr_asr_provider")
 
 @register_plugin
 class FunASRASRProviderPlugin(BasePlugin):
-    """独立的 FunASR ASR provider 插件。"""
+    """注册并管理 Anima 套件使用的 FunASR Provider。"""
 
     plugin_name = "funasr_asr_provider_anima"
-    plugin_version = "1.0.0"
-    plugin_description = "FunASR ASR provider"
     configs = [FunASRProviderConfig]
     dependent_components = ["asr_adapter_anima:service:asr_provider_registry"]
 
@@ -41,7 +38,11 @@ class FunASRASRProviderPlugin(BasePlugin):
     async def on_plugin_loaded(self) -> None:
         """向 asr_adapter 注册 FunASR provider。"""
 
-        config = self.config if isinstance(self.config, FunASRProviderConfig) else FunASRProviderConfig()
+        config = (
+            self.config
+            if isinstance(self.config, FunASRProviderConfig)
+            else FunASRProviderConfig()
+        )
         if not config.plugin.enabled:
             logger.info("FunASR ASR provider 已禁用")
             return
@@ -53,12 +54,17 @@ class FunASRASRProviderPlugin(BasePlugin):
         if registry is None:
             raise RuntimeError("无法获取 asr_adapter_anima provider registry service")
 
-        self.provider = FunASRProvider(config)
-        registry.register_provider(
-            self.provider,
-            default=config.plugin.register_as_default,
-        )
-        logger.info("FunASR ASR provider 已注册")
+        provider = FunASRProvider(config)
+        try:
+            registry.register_provider(
+                provider,
+                default=config.plugin.register_as_default,
+            )
+        except Exception:
+            self.provider = None
+            raise
+        self.provider = provider
+        logger.info("FunASR ASR Provider 已注册")
 
     async def on_plugin_unloaded(self) -> None:
         """注销 FunASR provider。"""
@@ -70,6 +76,7 @@ class FunASRASRProviderPlugin(BasePlugin):
         if registry is not None:
             registry.unregister_provider(FunASRProvider.provider_name)
         self.provider = None
+        logger.info("FunASR ASR Provider 已注销")
 
 
 __all__ = ["FunASRASRProviderPlugin"]

@@ -4,14 +4,14 @@ from __future__ import annotations
 
 from typing import ClassVar
 
-from src.core.components.base.config import BaseConfig, Field, SectionBase, config_section
+from src.app.plugin_system.base import BaseConfig, Field, SectionBase, config_section
 
 
 class FunASRProviderConfig(BaseConfig):
     """FunASR provider 配置。"""
 
-    config_name: ClassVar[str] = "config"
-    config_description: ClassVar[str] = "FunASR ASR provider 配置"
+    name: ClassVar[str] = "config"
+    description: ClassVar[str] = "FunASR ASR provider 配置"
 
     @config_section("plugin", title="插件设置", tag="plugin")
     class PluginSection(SectionBase):
@@ -27,13 +27,6 @@ class FunASRProviderConfig(BaseConfig):
             default=True,
             description="注册后是否作为默认 ASR provider",
             label="设为默认 Provider",
-            tag="plugin",
-        )
-        config_version: str = Field(
-            default="1.0.0",
-            description="配置文件版本",
-            label="配置版本",
-            disabled=True,
             tag="plugin",
         )
 

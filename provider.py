@@ -1,4 +1,4 @@
-"""独立的 FunASR provider 实现。"""
+"""FunASR Provider 的配置校验与运行时工厂。"""
 
 from __future__ import annotations
 
@@ -10,7 +10,7 @@ from .src.recognizer import StreamingRecognizer
 
 
 class FunASRProvider:
-    """FunASR ASR provider。"""
+    """根据套件配置创建麦克风音频源和 FunASR 识别器。"""
 
     provider_name = "funasr"
 

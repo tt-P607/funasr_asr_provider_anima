@@ -276,7 +276,9 @@ class StreamingRecognizer:
         path = Path(remote_code)
         if not path.is_file():
             raise RuntimeError(f"FunASR remote_code 文件不存在: {remote_code}")
-        sys.path.append(str(path.parent))
+        parent = str(path.parent)
+        if parent not in sys.path:
+            sys.path.append(parent)
         importlib.import_module(path.stem)
 
     def _trim_audio_buffer(self) -> None:
